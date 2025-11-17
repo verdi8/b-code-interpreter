@@ -1,0 +1,22 @@
+{
+    "name": "verdi8/b-code-interpreter",
+    "version": "0.0.1",
+    "description": "An interpreter for the b-code protocol",
+    "keywords": "b-code, arduino",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/verdi8/b-code-interpreter.git"
+    },
+    "authors":
+    [
+      {
+        "name": "verdi8",
+        "url": "https://github.com/verdi8"
+      }
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/verdi8/b-code-interpreter",
+    "frameworks": "*",
+    "platforms": "*"
+  }
