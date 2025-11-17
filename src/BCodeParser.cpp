@@ -1,5 +1,6 @@
 #include "BCodeParser.h"
-#include <stdlib.h> // For strtoul, strtof
+#include <stdlib.h> // For atof
+#include <errno.h>  // For errno
 
 void BCodeParser::skipWhitespaces(char*& input) {
     while (*input == ' ') {
@@ -9,26 +10,28 @@ void BCodeParser::skipWhitespaces(char*& input) {
 
 unsigned int BCodeParser::readUnsignedInt(char*& input) {
     skipWhitespaces(input);
-    char* endPtr;
-    unsigned long value = strtoul(input, &endPtr, 10);
-    if (endPtr == input) {
-        input = nullptr; // Indicate parsing failure
+    int value = atoi(input);
+    if (value == 0 && *input != '0') { // Detect parsing failure only
+        input = nullptr;
         return 0;
     }
-    input = endPtr;
+    while (*input >= '0' && *input <= '9') { // Move input pointer past the number
+        ++input;
+    }
     return static_cast<unsigned int>(value);
 }
 
 float BCodeParser::readFloat(char*& input) {
     skipWhitespaces(input);
-    char* endPtr;
-    float value = strtof(input, &endPtr);
-    if (endPtr == input) {
-        input = nullptr; // Indicate parsing failure
+    double value = atof(input);
+    if (value == 0.0 && *input != '0') { // Detect parsing failure only
+        input = nullptr;
         return 0.0f;
     }
-    input = endPtr;
-    return value;
+    while ((*input >= '0' && *input <= '9') || *input == '.' || *input == 'e' || *input == 'E' || *input == '+' || *input == '-') {
+        ++input; // Move input pointer past the number
+    }
+    return static_cast<float>(value);
 }
 
 char BCodeParser::readChar(char*& input) {
