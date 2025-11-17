@@ -21,5 +21,8 @@ jobs:
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
 
-      - name: Run PlatformIO Tests
-        run: pio test
+      - name: Run PlatformIO build nanoatmega328
+        run: pio run -e nanoatmega328
+
+      - name: Run PlatformIO native tests
+        run: pio test -e native
