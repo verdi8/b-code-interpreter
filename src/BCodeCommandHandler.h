@@ -4,7 +4,7 @@
 
 /**
  * @class BCodeCommandHandler
- * @brief Interface for handling BCode commands.
+ * @brief Interface for handling BCode commands. It is where the actions for each command are defined.
  */
 class BCodeCommandHandler {
 public:
