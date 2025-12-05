@@ -42,3 +42,17 @@ char BCodeParser::readChar(char*& input) {
     }
     return value;
 }
+
+char* BCodeParser::readWord(char*& input) {
+    skipWhitespaces(input);
+    char* start = input;
+    while (*input != ' ' && *input != '\0') {
+        ++input;
+    }
+    // input is now at a space or end of string, null-terminate the word
+    if (*input != '\0') {
+        *input = '\0';
+        ++input;
+    }
+    return start;
+}

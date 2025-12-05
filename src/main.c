@@ -7,7 +7,7 @@
 */
 
 void setup() {
-    // Setup code here
+    // Initialization code here
 }
 
 void loop() {

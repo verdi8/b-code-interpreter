@@ -32,4 +32,10 @@ public:
      * @return The read character.
      */
     static char readChar(char*& input);
+
+    /**
+     * Read a word (string without spaces) from the input string.
+     */
+    static char* readWord(char*& input);
+
 };

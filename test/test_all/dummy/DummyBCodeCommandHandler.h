@@ -19,7 +19,7 @@ public:
      * @param direction The direction of the movement (e.g., 'F' for forward, 'B' for backward).
      * @param units The number of units to move in the specified direction.
      */
-    unsigned int performTranslationMovement(char direction, float units) override;
+    unsigned int performTranslationMovement(char direction1, char direction2, char direction3, float units) override;
 
     /**
      * @brief Resets the internal state of the command handler.

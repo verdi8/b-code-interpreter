@@ -6,8 +6,8 @@ unsigned int DummyBCodeCommandHandler::performAction(int code) {
 }
 
 
-unsigned int DummyBCodeCommandHandler::performTranslationMovement(char direction, float units) {
-    performedDirection = direction;
+unsigned int DummyBCodeCommandHandler::performTranslationMovement(char direction1, char direction2, char direction3, float units) {
+    performedDirection = direction1;
     performedUnits = units;
     return returnCode;
 }

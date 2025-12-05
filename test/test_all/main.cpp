@@ -16,7 +16,6 @@
 
 #include <gtest/gtest.h>
 
-#if !defined(ARDUINO)
 
 int main(int argc, char **argv)
 {
@@ -27,4 +26,3 @@ int main(int argc, char **argv)
     return 0;
 }
 
-#endif

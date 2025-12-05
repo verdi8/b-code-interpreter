@@ -50,7 +50,7 @@ unsigned int BCodeInterpreter::doProcess(char* commandLine) {
         if (ptr == nullptr) {
             return ReturnCodes::ERROR_UNPARSABLE_TRANSLATE_UNITS;
         }
-        return commandHandler->performTranslationMovement(direction, units);
+        return commandHandler->performTranslationMovement(direction, NULL, NULL, units);
     }
 
     case 'Z': { // nop command
