@@ -1,12 +1,21 @@
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "fixtures/BCodeInterpreterTest.h"
 
+using ::testing::Return;
 
 TEST_F(BCodeInterpreterTest, UnknwonCommand)
 {
-    dummmyBCodeIO->injectInputLine("$ 123 456");
+    ON_CALL(*mockBCodeIO, readLine())
+        .WillByDefault(Return(const_cast<char*>("$ 123 456")));
+
+    EXPECT_CALL(*mockBCodeCommandHandler, performAction(testing::_))
+        .Times(0);
+
+    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("ERR 2")))
+        .Times(1);
+   
     bCodeInterpreter->process();
-    EXPECT_STREQ(dummmyBCodeIO->getOutputLine(), "ERR 2");
-    EXPECT_EQ(dummyBCodeCommandHandler->getPerformedActionCode(), -1);
+
 }

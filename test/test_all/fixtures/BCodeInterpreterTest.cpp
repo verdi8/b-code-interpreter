@@ -1,17 +1,20 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "BCodeInterpreterTest.h"
 #include "BCodeInterpreter.h"
-#include "dummy/DummyBCodeIO.h"
-#include "dummy/DummyBCodeCommandHandler.h"
+
+
+using ::testing::Mock;
 
 BCodeInterpreterTest::BCodeInterpreterTest()
 {
-    dummmyBCodeIO = new DummyBCodeIO();
-    dummyBCodeCommandHandler = new DummyBCodeCommandHandler();
-    bCodeInterpreter = new BCodeInterpreter(dummmyBCodeIO, dummyBCodeCommandHandler);
+    mockBCodeIO = new MockBCodeIO();
+    mockBCodeCommandHandler = new MockBCodeCommandHandler();
+    bCodeInterpreter = new BCodeInterpreter(mockBCodeIO, mockBCodeCommandHandler);
 }
 
 void BCodeInterpreterTest::SetUp()
 {
-    dummyBCodeCommandHandler->reset();
+    Mock::VerifyAndClear(mockBCodeCommandHandler);
+    Mock::VerifyAndClear(mockBCodeIO);    
 }
