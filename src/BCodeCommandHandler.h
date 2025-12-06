@@ -35,6 +35,21 @@ public:
     virtual unsigned int nop() {
         return ReturnCodes::OK;
     }
-    
+
+protected:
+
+    /**
+     * @brief Utility method to check if the expected direction matches any of the provided directions.
+     * @param expectedDirection The direction character to check.
+     * @param direction1 The first direction character to compare against.
+     * @param direction2 The second direction character to compare against.
+     * @param direction3 The third direction character to compare against.
+     * @return true if expectedDirection matches any of the provided directions, false otherwise.
+     */
+    inline bool isOneOf(char expectedDirection, char direction1, char direction2, char direction3) {
+        return (expectedDirection == direction1) ||
+               (expectedDirection == direction2) ||
+               (expectedDirection == direction3);
+    }
 
 };

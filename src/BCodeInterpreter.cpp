@@ -2,6 +2,7 @@
 #include "BCodeParser.h"
 #include <stdlib.h> // For strtod
 #include <stdio.h>  // For snprintf
+#include <string.h> // For strlen
 
 
 BCodeInterpreter::BCodeInterpreter(BCodeIO* io, BCodeCommandHandler* commandHandler)
@@ -31,13 +32,16 @@ unsigned int BCodeInterpreter::doProcess(char* commandLine) {
     // Parse the command line
     char* ptr = commandLine;
 
-    char commandCode = BCodeParser::readChar(ptr);
+    char commandCode = BCodeParser::readSingleChar(ptr);
+    if (BCodeParser::errored()) {
+        return ReturnCodes::ERROR_UNPARSABLE_COMMAND_CODE;
+    }
 
     switch (commandCode)
     {
     case 'A': { // Action command
         int actionId = BCodeParser::readUnsignedInt(ptr);
-        if (ptr == nullptr) {
+        if (BCodeParser::errored()) {
             return ReturnCodes::ERROR_UNPARSABLE_ACTION_CODE;
         } 
         commandHandler->performAction(actionId);
@@ -45,12 +49,19 @@ unsigned int BCodeInterpreter::doProcess(char* commandLine) {
     }
 
     case 'T': { // Translate command
-        char direction = BCodeParser::readChar(ptr);
-        float units = BCodeParser::readFloat(ptr);
-        if (ptr == nullptr) {
-            return ReturnCodes::ERROR_UNPARSABLE_TRANSLATE_UNITS;
+        char* directions = BCodeParser::readCharSequence(ptr, 3); // Read up to 3 direction characters
+        if (BCodeParser::errored()) {
+            return ReturnCodes::ERROR_UNPARSABLE_TRANSLATION_DIRECTION;
         }
-        return commandHandler->performTranslationMovement(direction, NULL, NULL, units);
+        char direction1 = directions[0];
+        char direction2 = directions[1];
+        char direction3 = direction2 != '\0' ? directions[2] : '\0';
+        
+        float units = BCodeParser::readFloat(ptr);
+        if (BCodeParser::errored()) {
+            return ReturnCodes::ERROR_UNPARSABLE_TRANSLATION_UNIT;
+        }
+        return commandHandler->performTranslationMovement(direction1, direction2, direction3, units);
     }
 
     case 'Z': { // nop command

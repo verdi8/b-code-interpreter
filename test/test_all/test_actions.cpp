@@ -1,14 +1,16 @@
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include "fixtures/BCodeInterpreterTest.h"
 
 using ::testing::Return;
 
-TEST_F(BCodeInterpreterTest, ActionOk)
+TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_IsProcessedCorrectly)
 {
-    ON_CALL(*mockBCodeIO, readLine())
-        .WillByDefault(Return(const_cast<char*>("A 42")));
+
+    char commandLine[] = "A 42";
+
+    EXPECT_CALL(*mockBCodeIO, readLine())
+        .WillOnce(Return(commandLine));
 
     EXPECT_CALL(*mockBCodeCommandHandler, performAction(42))
         .Times(1);
@@ -19,10 +21,12 @@ TEST_F(BCodeInterpreterTest, ActionOk)
     bCodeInterpreter->process();
 }
 
-TEST_F(BCodeInterpreterTest, ActionIllegalCode)
+TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_WithUnparsableActionCode_IsRejected)
 {
-    ON_CALL(*mockBCodeIO, readLine())
-        .WillByDefault(Return(const_cast<char*>("A XYZ")));
+    char commandLine[] = "A XYZ";
+
+    EXPECT_CALL(*mockBCodeIO, readLine())
+        .WillOnce(Return(commandLine));
 
     EXPECT_CALL(*mockBCodeCommandHandler, performAction(testing::_))
         .Times(0);

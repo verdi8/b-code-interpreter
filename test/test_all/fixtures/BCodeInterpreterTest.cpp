@@ -17,4 +17,6 @@ void BCodeInterpreterTest::SetUp()
 {
     Mock::VerifyAndClear(mockBCodeCommandHandler);
     Mock::VerifyAndClear(mockBCodeIO);    
+    Mock::AllowLeak(mockBCodeCommandHandler);
+    Mock::AllowLeak(mockBCodeIO);
 }

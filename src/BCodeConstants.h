@@ -14,23 +14,43 @@ namespace ReturnCodes {
     constexpr unsigned int ERROR_PARSING_ERROR = 1;
     
     /**
+     * An unparsable command code is a command code that cannot be interpreted.
+     * @brief Defines the error code for unparsable command codes.
+     */
+    constexpr unsigned int ERROR_UNPARSABLE_COMMAND_CODE = 2;
+
+
+    /**
      * An unknown command is a command that is not part of the protocol.
      * @brief Defines the error code for unknown commands.
      */
-    constexpr unsigned int ERROR_UNKNOWN_COMMAND = 2;
+    constexpr unsigned int ERROR_UNKNOWN_COMMAND = 3;
 
     /**
      * An unsupported command is a command that is part of the protocol but not implemented by the device.
      * @brief Defines the error code for unsupported commands.
      */
-    constexpr unsigned int ERROR_UNSUPPORTED_COMMAND = 3;
+    constexpr unsigned int ERROR_UNSUPPORTED_COMMAND = 4;
 
 
     // Action-specific error codes
+
+    /**
+     * @brief Defines the error code for unparsable action codes.
+     */
     constexpr unsigned int ERROR_UNPARSABLE_ACTION_CODE = 100;
 
     // Translation-specific error codes
-    constexpr unsigned int ERROR_UNPARSABLE_TRANSLATE_UNITS = 200;
+
+    /**
+     * @brief Defines the error code for unparsable translation directions.
+     */
+    constexpr unsigned int ERROR_UNPARSABLE_TRANSLATION_DIRECTION = 200;
+    
+    /**
+     * @brief Defines the error code for unparsable translation units.
+     */
+    constexpr unsigned int ERROR_UNPARSABLE_TRANSLATION_UNIT = 201;
 }
 
 namespace CommonTranslationDirections {
