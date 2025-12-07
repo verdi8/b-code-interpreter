@@ -1,26 +1,26 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include "fixtures/BCodeInterpreterTest.h"
+#include "fixtures/InterpreterTest.h"
 
 using ::testing::Return;
 
-TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_IsProcessedCorrectly)
+TEST_F(InterpreterTest, AssertThat_ActionCommand_IsProcessedCorrectly)
 {
 
     WRITE_COMMAND_AND_EXPECT_RESPONSE("A 42", "OK")
 
-    EXPECT_CALL(*mockBCodeCommandHandler, performAction(42))
+    EXPECT_CALL(*mockCommandHandler, performAction(42))
         .Times(1);
 
     bCodeInterpreter->process();
 }
 
-TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_WithHandlerError_IsRejected)
+TEST_F(InterpreterTest, AssertThat_ActionCommand_WithHandlerError_IsRejected)
 {
 
     WRITE_COMMAND_AND_EXPECT_RESPONSE("A 55", "ERR 999")
 
-    EXPECT_CALL(*mockBCodeCommandHandler, performAction(55))
+    EXPECT_CALL(*mockCommandHandler, performAction(55))
         .Times(1)
         .WillOnce(Return(999));
 
@@ -30,12 +30,12 @@ TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_WithHandlerError_IsRejecte
 
 
 
-TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_WithUnparsableActionCode_IsRejected)
+TEST_F(InterpreterTest, AssertThat_ActionCommand_WithUnparsableActionCode_IsRejected)
 {
 
     WRITE_COMMAND_AND_EXPECT_RESPONSE("A XYZ", "ERR 100")
 
-    EXPECT_CALL(*mockBCodeCommandHandler, performAction(testing::_))
+    EXPECT_CALL(*mockCommandHandler, performAction(testing::_))
         .Times(0);
 
     bCodeInterpreter->process();

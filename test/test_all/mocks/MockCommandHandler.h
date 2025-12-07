@@ -1,9 +1,10 @@
 #pragma once
-#include "BCodeCommandHandler.h"
+#include "bcode/CommandHandler.h"
 #include <gmock/gmock.h>  // Brings in gMock.
 
+using ::bcode::CommandHandler;
 
-class MockBCodeCommandHandler : public BCodeCommandHandler {
+class MockCommandHandler : public CommandHandler {
  public:
     MOCK_METHOD(unsigned int, performAction, (int code), (override));
     MOCK_METHOD(unsigned int, performTranslationMovement, (char direction1, char direction2, char direction3, float units), (override));
