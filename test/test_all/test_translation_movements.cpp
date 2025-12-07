@@ -5,15 +5,9 @@ using ::testing::Return;
 
 TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithOneDirections_IsProcessedCorrectly)
 {
-    char commandLine[] = "T F 4.2";
-
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine)); 
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T F 4.2", "OK")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement('F', '\0', '\0', 4.2)) 
-        .Times(1);
-    
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("OK")))
         .Times(1);
 
     bCodeInterpreter->process();
@@ -21,15 +15,9 @@ TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithOneDirections_IsP
 
 TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithTwoDirections_IsProcessedCorrectly)
 {
-    char commandLine[] = "T FR 3.5";
-
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine)); 
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T FR 3.5", "OK")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement('F', 'R', '\0', 3.5)) 
-        .Times(1);
-    
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("OK")))
         .Times(1);
 
     bCodeInterpreter->process();
@@ -37,64 +25,55 @@ TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithTwoDirections_IsP
 
 TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithThreeDirections_IsProcessedCorrectly)
 {
-    char commandLine[] = "T FRU 5";
-
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine)); 
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T FRU 5", "OK")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement('F', 'R', 'U', 5)) 
         .Times(1);
     
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("OK")))
-        .Times(1);
+    bCodeInterpreter->process();
+}
 
+TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithHdnalerError_IsRejected)
+{
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T F 1.5", "ERR 999")
+
+    EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement('F', '\0', '\0', 1.5))
+        .Times(1)
+        .WillOnce(Return(999));
+    
     bCodeInterpreter->process();
 }
 
 TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithTooMuchDirections_IsRejected)
 {
-    char commandLine[] = "T FRUD 0";
 
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine)); 
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T FRUD 2", "ERR 200")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement(testing::_, testing::_, testing::_, testing::_))
         .Times(0);
-    
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("ERR 200")))
-        .Times(1);
 
     bCodeInterpreter->process();
 }
 
 TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithInvalidUnitOfMovement_IsRejected)
 {
-    char commandLine[] = "T F XYZ";
-
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine)); 
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T F XYZ", "ERR 201")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement(testing::_, testing::_, testing::_, testing::_))
         .Times(0);
-    
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("ERR 201")))
-        .Times(1);
 
     bCodeInterpreter->process();
 }
 
 TEST_F(BCodeInterpreterTest, AssertThat_TranslationCommand_WithMissingUnitOfMovement_IsRejected)
 {
-    char commandLine[] = "T F";
-
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine)); 
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("T F XYZ", "ERR 201")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performTranslationMovement(testing::_, testing::_, testing::_, testing::_))
         .Times(0);
     
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("ERR 201")))
-        .Times(1);
-
     bCodeInterpreter->process();
 }
+
+
+

@@ -44,8 +44,7 @@ unsigned int BCodeInterpreter::doProcess(char* commandLine) {
         if (BCodeParser::errored()) {
             return ReturnCodes::ERROR_UNPARSABLE_ACTION_CODE;
         } 
-        commandHandler->performAction(actionId);
-        return ReturnCodes::OK;
+        return commandHandler->performAction(actionId);
     }
 
     case 'T': { // Translate command
@@ -65,7 +64,7 @@ unsigned int BCodeInterpreter::doProcess(char* commandLine) {
     }
 
     case 'Z': { // nop command
-        return ReturnCodes::OK;
+        return commandHandler->nop();
     }
 
     default: {

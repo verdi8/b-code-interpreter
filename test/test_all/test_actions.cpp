@@ -7,32 +7,36 @@ using ::testing::Return;
 TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_IsProcessedCorrectly)
 {
 
-    char commandLine[] = "A 42";
-
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine));
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("A 42", "OK")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performAction(42))
-        .Times(1);
-
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("OK")))
         .Times(1);
 
     bCodeInterpreter->process();
 }
 
+TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_WithHandlerError_IsRejected)
+{
+
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("A 55", "ERR 999")
+
+    EXPECT_CALL(*mockBCodeCommandHandler, performAction(55))
+        .Times(1)
+        .WillOnce(Return(999));
+
+    bCodeInterpreter->process();
+}
+
+
+
+
 TEST_F(BCodeInterpreterTest, AssertThat_ActionCommand_WithUnparsableActionCode_IsRejected)
 {
-    char commandLine[] = "A XYZ";
 
-    EXPECT_CALL(*mockBCodeIO, readLine())
-        .WillOnce(Return(commandLine));
+    WRITE_COMMAND_AND_EXPECT_RESPONSE("A XYZ", "ERR 100")
 
     EXPECT_CALL(*mockBCodeCommandHandler, performAction(testing::_))
         .Times(0);
-
-    EXPECT_CALL(*mockBCodeIO, writeLine(testing::StrEq("ERR 100")))
-        .Times(1);
 
     bCodeInterpreter->process();
 }
