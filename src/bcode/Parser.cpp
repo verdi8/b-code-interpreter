@@ -4,23 +4,13 @@
 
 namespace bcode
 {
-
-    void Parser::skipWhitespaces(char *&input)
-    {
-        while (*input == ' ')
-        {
-            ++input;
-        }
-    }
-
     unsigned int Parser::readUnsignedInt(char *&input)
     {
-        clearErrorFlag();
-        skipWhitespaces(input);
+        ready(input);
         unsigned int value = atoi(input);
         if (value == 0 && *input != '0')
         { // Detect parsing failure only
-            setErrorFlag();
+            markErrored();
             return 0;
         }
         while (*input >= '0' && *input <= '9')
@@ -32,12 +22,11 @@ namespace bcode
 
     float Parser::readFloat(char *&input)
     {
-        clearErrorFlag();
-        skipWhitespaces(input);
+        ready(input);
         double value = atof(input);
         if (value == 0.0 && *input != '0')
         { // Detect parsing failure only
-            setErrorFlag();
+            markErrored();
             return 0.0f;
         }
         while ((*input >= '0' && *input <= '9') || *input == '.' || *input == 'e' || *input == 'E' || *input == '+' || *input == '-')
@@ -49,18 +38,17 @@ namespace bcode
 
     char Parser::readSingleChar(char *&input)
     {
-        clearErrorFlag();
-        skipWhitespaces(input);
+        ready(input);
         char value = *input;
         if (value == '\0')
         { // No character found
-            setErrorFlag();
+            markErrored();
             return '\0';
         }
         ++input;
         if (*input != ' ' && *input != '\0')
         { // There are more characters before the next whitespace
-            setErrorFlag();
+            markErrored();
             return '\0';
         }
         return value;
@@ -68,12 +56,11 @@ namespace bcode
 
     char *Parser::readCharSequence(char *&input, unsigned int maxLength)
     {
-        clearErrorFlag();
-        skipWhitespaces(input);
+        ready(input);
         char *start = input;
         if (*start == '\0')
         { // No word found
-            setErrorFlag();
+            markErrored();
             return nullptr;
         }
         unsigned int length = 0;
@@ -81,7 +68,7 @@ namespace bcode
         {
             if (length == maxLength)
             { // Exceeded maximum length
-                setErrorFlag();
+                markErrored();
                 return nullptr;
             }
             ++input;
@@ -99,17 +86,32 @@ namespace bcode
     }
 
     bool Parser::errorFlag = false;
+
+    bool Parser::errored()
+    {
+        return errorFlag;
+    }
+    
+    void Parser::skipLeadingWhitespaces(char *&input)
+    {
+        while (*input == ' ')
+        {
+            ++input;
+        }
+    }
+
     void Parser::clearErrorFlag()
     {
         errorFlag = false;
     }
-    void Parser::setErrorFlag()
+    void Parser::markErrored()
     {
         errorFlag = true;
     }
-    bool Parser::errored()
+    void Parser::ready(char *&input)
     {
-        return errorFlag;
+        skipLeadingWhitespaces(*&input);
+        clearErrorFlag();
     }
 
 }

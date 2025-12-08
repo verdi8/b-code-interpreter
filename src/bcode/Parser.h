@@ -11,12 +11,6 @@ namespace bcode
     {
     public:
         /**
-         * Skips over any whitespace characters in the input string.
-         * @param input A reference to the input string pointer, which will be advanced past the whitespace.
-         */
-        static void skipWhitespaces(char *&input);
-
-        /**
          * Parses a floating-point number from the input string.
          * @param input A reference to the input string pointer, which will be advanced past the parsed number.
          * @return The parsed floating-point number.
@@ -55,8 +49,10 @@ namespace bcode
 
     private:
         static bool errorFlag;        ///< Indicates if a parsing error has occurred.
-        static void clearErrorFlag(); ///< Resets the error flag to false.
-        static void setErrorFlag();   ///< Sets the error flag to true.
+        static void markErrored();   ///< Sets the error flag to true.
+        static void clearErrorFlag(); ///< Clears the error flag.
+        static void skipLeadingWhitespaces(char *&input); ///< Advances the input pointer past any leading whitespace characters.
+        static void ready(char *&input); ///< Skips the leading whitespaces and clears the error flag.
     };
 
 }
