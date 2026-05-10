@@ -7,23 +7,23 @@ using ::testing::Return;
 
 TEST_F(InterpreterTest, AssertThat_NoCommand_IsRejected)
 {
-    WRITE_COMMAND_AND_EXPECT_RESPONSE("", "ERR 2")
-   
-    bCodeInterpreter->process();
+    char commandLine[] = "";
+
+    EXPECT_EQ(bCodeInterpreter->process(commandLine), 2u);
 }
 
 TEST_F(InterpreterTest, AssertThat_UnknownCommand_IsRejected)
 {
-    WRITE_COMMAND_AND_EXPECT_RESPONSE("$ 123 456", "ERR 3")
+    char commandLine[] = "$ 123 456";
 
-    bCodeInterpreter->process();
+    EXPECT_EQ(bCodeInterpreter->process(commandLine), 3u);
 }
 
 TEST_F(InterpreterTest, AssertThat_TooLongCommand_IsRejected)
 {
-    WRITE_COMMAND_AND_EXPECT_RESPONSE("ABCDE 123 456", "ERR 2")   
-   
-    bCodeInterpreter->process();
+    char commandLine[] = "ABCDE 123 456";
+
+    EXPECT_EQ(bCodeInterpreter->process(commandLine), 2u);
 }
 
 

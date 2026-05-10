@@ -7,37 +7,21 @@
 namespace bcode
 {
 
-    Interpreter::Interpreter(Io *io, CommandHandler *commandHandler)
-        : io(io), commandHandler(commandHandler) {}
+    Interpreter::Interpreter(CommandHandler *commandHandler)
+        : commandHandler(commandHandler) {}
 
-    void Interpreter::process()
+    ReturnCode Interpreter::process(char *commandLine)
     {
-        if (!(io && commandHandler))
+        if (!(commandLine && commandHandler))
         {
-            return;
+            return ReturnCodes::ERROR_UNPARSABLE_COMMAND_CODE;
         }
 
-        char *commandLine = io->readLine(); // Read a command
-        if (!commandLine || commandLine[0] == '\0')
+        if (commandLine[0] == '\0')
         {
-            return; // Ignore empty lines
+            return ReturnCodes::ERROR_UNPARSABLE_COMMAND_CODE;
         }
 
-        unsigned int returnCode = doProcess(commandLine);
-        if (returnCode == ReturnCodes::OK)
-        {
-            io->writeLine("OK");
-        }
-        else
-        {
-            snprintf(buffer, sizeof(buffer), "ERR %d", returnCode);
-            io->writeLine(buffer);
-        }
-    }
-
-    unsigned int Interpreter::doProcess(char *commandLine)
-    {
-        // Parse the command line
         char *ptr = commandLine;
 
         char commandCode = Parser::readSingleChar(ptr);

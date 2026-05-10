@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../mocks/MockIo.h"
 #include "../mocks/MockCommandHandler.h"
 #include "bcode/Interpreter.h"
 #include "gtest/gtest.h"
@@ -14,7 +13,6 @@ protected:
     InterpreterTest();
     void SetUp();
 
-    MockIo *mockIo;
     MockCommandHandler *mockCommandHandler;
 
     /**

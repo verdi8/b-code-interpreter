@@ -8,15 +8,12 @@ using ::bcode::Interpreter;
 
 InterpreterTest::InterpreterTest()
 {
-    mockIo = new MockIo();
     mockCommandHandler = new MockCommandHandler();
-    bCodeInterpreter = new Interpreter(mockIo, mockCommandHandler);
+    bCodeInterpreter = new Interpreter(mockCommandHandler);
 }
 
 void InterpreterTest::SetUp()
 {
     Mock::VerifyAndClear(mockCommandHandler);
-    Mock::VerifyAndClear(mockIo);    
     Mock::AllowLeak(mockCommandHandler);
-    Mock::AllowLeak(mockIo);
 }
