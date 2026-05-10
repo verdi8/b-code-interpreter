@@ -8,21 +8,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v6
+      - uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pip
             ~/.platformio/.cache
           key: ${{ runner.os }}-pio
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
 
-      - name: Run PlatformIO build nanoatmega328
-        run: pio run -e nanoatmega328
+      - name: Run PlatformIO build arduino_uno
+        run: pio run -e arduino_uno
 
       - name: Run PlatformIO native tests
         run: pio test -e native
